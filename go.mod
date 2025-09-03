@@ -12,6 +12,7 @@ require (
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.1 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
+	github.com/hnakamur/sakuraclouddns v0.0.0-00010101000000-000000000000 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/miekg/dns v1.1.67 // indirect
 	golang.org/x/crypto v0.40.0 // indirect

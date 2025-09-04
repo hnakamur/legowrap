@@ -144,6 +144,10 @@ func NewClient(cfg *Config, acc registration.User, keyType certcrypto.KeyType, o
 	return c, nil
 }
 
+func (c *Client) RegisterAccount(opts registration.RegisterOptions) (*registration.Resource, error) {
+	return c.legoClient.Registration.Register(opts)
+}
+
 func (c *Client) SetDNS01Provider(dnsProvider challenge.Provider) error {
 	err := c.legoClient.Challenge.SetDNS01Provider(dnsProvider,
 		dns01.CondOption(len(c.config.DNS.Resolvers) > 0,

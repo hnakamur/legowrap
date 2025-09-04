@@ -11,7 +11,7 @@ import (
 type Account struct {
 	Email        string                 `json:"email"`
 	Registration *registration.Resource `json:"registration"`
-	key          crypto.PrivateKey
+	PrivateKey   crypto.PrivateKey
 }
 
 /** Implementation of the registration.User interface **/
@@ -24,7 +24,7 @@ func (a *Account) GetEmail() string {
 
 // GetPrivateKey returns the private RSA account key.
 func (a *Account) GetPrivateKey() crypto.PrivateKey {
-	return a.key
+	return a.PrivateKey
 }
 
 // GetRegistration returns the server registration.

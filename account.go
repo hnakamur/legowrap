@@ -2,7 +2,6 @@ package legowrap
 
 import (
 	"crypto"
-	"log"
 
 	"github.com/go-acme/lego/v4/registration"
 )
@@ -11,14 +10,13 @@ import (
 type Account struct {
 	Email        string                 `json:"email"`
 	Registration *registration.Resource `json:"registration"`
-	PrivateKey   crypto.PrivateKey
+	PrivateKey   crypto.PrivateKey      `json:"-"`
 }
 
 /** Implementation of the registration.User interface **/
 
 // GetEmail returns the email address for the account.
 func (a *Account) GetEmail() string {
-	log.Printf("Account.GetEmail, a=%p, email=%s", a, a.Email)
 	return a.Email
 }
 

@@ -217,6 +217,7 @@ func (c *Client) RenewCertificate(domain string, domains []string,
 				fmt.Errorf("error while construction the ARI CertID for domain %s, err: %v",
 					domain, err)
 		}
+		c.logger.Info("got replacesCertID", "replacesCertID", replacesCertID)
 	}
 
 	if ariRenewalTime == nil {
@@ -297,11 +298,18 @@ func (c *Client) needRenewal(x509Cert *x509.Certificate, domain string, days int
 		return c.needRenewalDynamic(x509Cert, domain, now)
 	}
 
+	notAfter := int(x509Cert.NotAfter.Sub(now).Hours() / 24.0)
+
+	c.logger.Info("needRenewal nonDynamic",
+		"domain", domain, "definedRenewwalDays", days,
+		"certNotAfter", x509Cert.NotAfter.Format(time.RFC3339),
+		"now", now.Format(time.RFC3339),
+		"notAfterInDays", notAfter)
+
 	if days < 0 {
 		return nil
 	}
 
-	notAfter := int(x509Cert.NotAfter.Sub(now).Hours() / 24.0)
 	if notAfter <= days {
 		return nil
 	}
@@ -321,6 +329,12 @@ func (c *Client) needRenewalDynamic(x509Cert *x509.Certificate, domain string, n
 	}
 
 	dueDate := x509Cert.NotAfter.Add(-1 * time.Duration(lifetime.Nanoseconds()/divisor))
+
+	c.logger.Info("needRenewal dynamic",
+		"domain", domain,
+		"certNotAfter", x509Cert.NotAfter.Format(time.RFC3339),
+		"now", now.Format(time.RFC3339),
+		"dueDate", dueDate.Format(time.RFC3339))
 
 	if dueDate.Before(now) {
 		return nil

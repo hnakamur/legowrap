@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/go-acme/lego/v4/acme/api"
-	"github.com/go-acme/lego/v4/certcrypto"
 	"github.com/go-acme/lego/v4/certificate"
 	"github.com/go-acme/lego/v4/challenge"
 	"github.com/go-acme/lego/v4/challenge/dns01"
@@ -42,7 +41,8 @@ type AccountConfig struct {
 }
 
 type CertificateConfig struct {
-	Timeout             time.Duration                  `yaml:"cert_timeout"`
+	KeyType             string                         `yaml:"key_type"`
+	Timeout             time.Duration                  `yaml:"timeout"`
 	OverallRequestLimit int                            `yaml:"overall_request_limit"`
 	DisableCommonName   bool                           `yaml:"disable_common_name"`
 	ObtainRequest       CertificateObtainRequestConfig `yaml:"obtain_request"`
@@ -81,6 +81,7 @@ type RenewConfig struct {
 }
 
 var ErrNoRenewal = errors.New("no renewal")
+var ErrSkipRenewal = errors.New("skip renewal")
 var ErrCetificateBundleStartsWithCA = errors.New("certificate bundle starts with a CA certificate")
 
 type Option func(*Client)
@@ -91,7 +92,7 @@ func WithSlogLogger(logger *slog.Logger) Option {
 	}
 }
 
-func NewClient(cfg *Config, acc registration.User, keyType certcrypto.KeyType, opts ...Option) (*Client, error) {
+func NewClient(cfg *Config, acc registration.User, opts ...Option) (*Client, error) {
 	c := &Client{
 		config: cfg,
 		logger: slog.Default(),
@@ -100,12 +101,17 @@ func NewClient(cfg *Config, acc registration.User, keyType certcrypto.KeyType, o
 		opt(c)
 	}
 
+	keyType, err := KeyTypeFromString(cfg.Certificate.KeyType)
+	if err != nil {
+		return nil, err
+	}
+
 	config := lego.NewConfig(acc)
 	config.CADirURL = cfg.CADirURL
 	config.UserAgent = cfg.UserAgent
 
 	config.Certificate = lego.CertificateConfig{
-		KeyType:             keyType,
+		KeyType:             keyType.toLegoKeyType(),
 		Timeout:             cfg.Certificate.Timeout,
 		OverallRequestLimit: cfg.Certificate.OverallRequestLimit,
 		DisableCommonName:   cfg.Certificate.DisableCommonName,
@@ -188,7 +194,8 @@ func (c *Client) IssueNewCertificate(domains []string) (*certificate.Resource, e
 }
 
 func (c *Client) RenewCertificate(domain string, domains []string,
-	curCert *x509.Certificate, now time.Time) (*certificate.Resource, error) {
+	curCert *x509.Certificate, now time.Time,
+	skipRenew bool) (*certificate.Resource, error) {
 
 	var ariRenewalTime *time.Time
 	var replacesCertID string
@@ -224,6 +231,11 @@ func (c *Client) RenewCertificate(domain string, domains []string,
 		if err := c.needRenewal(curCert, domain, c.config.Renew.Days, c.config.Renew.Dynamic, now); err != nil {
 			return nil, err
 		}
+	}
+
+	if skipRenew {
+		c.logger.Info("exit from RenewCertificate", "skipRenew", skipRenew)
+		return nil, ErrSkipRenewal
 	}
 
 	reqCfg := &c.config.Certificate.ObtainRequest

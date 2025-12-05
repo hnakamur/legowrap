@@ -1,0 +1,61 @@
+# legowrap-sakuraclouddns.yaml
+log:
+  # filename_pattern: 2006=yyyy, 01=mm, 02=dd, 15=HH, 04=MM, 05=SS
+  #filename_pattern: /var/log/legowrap-sakuraclouddns/legowrap-sakuraclouddns-20060102-150405.log
+  filename_pattern: stderr
+  level: debug
+days_before_issue_cert: 30
+lego:
+  # ca_dir_url
+  # staging     https://acme-staging-v02.api.letsencrypt.org/directory
+  # production  https://acme-v02.api.letsencrypt.org/directory
+  ca_dir_url: https://acme-v02.api.letsencrypt.org/directory
+  account:
+    email: my-admin@example.jp
+    resource_json: '{"body":{"status":"valid"},"uri":"https://acme-v02.api.letsencrypt.org/acme/acct/_YOUR_ID_HERE_"}'
+    private_key: ENC[AES256_GCM,data:Ij312DDTc34LYHxxsjq/2SYiVWyDI3kKHeOMVoGfkz7LX6MbJT6oPYktAxgD0EhdFc4Vt4R2z1sKxM/QwXzzNzATVUrQyjz441pzJw==,iv:uiycwmuKv+7jaa6VevAfAvp6Hq0RchMcp5Cbo03Q630=,tag:wlEJ5pnvs6H7ACdFEWZewg==,type:str]
+  certificate:
+    key_type: ec256
+    timeout: 30s
+    overall_request_limit: 0
+    disable_common_name: false
+    obtain_request:
+      bundle: true
+  http_client:
+    timeout: 0s
+    tls_skip_verify: false
+  dns:
+    timeout: 10s
+    resolvers: []
+    disable_cp: false
+    propagation_disable_ans: false
+    propagation_rns: false
+    propagation_wait: 0s
+  renew:
+    days: 30
+    dynamic: false
+sakura_cloud_dns:
+  token: ENC[AES256_GCM,data:jGNI835rkXrVUqKX+pNaI90=,iv:ry1xIbvzVTyu366TIibPPa9y+E34cwEYBZrk62jvcKM=,tag:dt4SKPXSMTLWvEM+fS4IoA==,type:str]
+  secret: ENC[AES256_GCM,data:dgvYoVH21Tyhte/vf0C+4YJi,iv:EJ1YDmLDt7eYJWL9CZgHXNrgYfDgwHS5vVqxo58sSBM=,tag:o7xg6RrppbloxKFGCWHJ1Q==,type:str]
+  ttl: 10
+  propagation_timeout: 2m
+  polling_interval: 2s
+  http_client_timeout: 10s
+certificate: /etc/ssl/certs/example.jp.crt
+certificate_key: /etc/ssl/private/example.jp.key
+post_command: systemctl reload nginx
+sops:
+  age:
+    - recipient: age1vhw6fwfr058c364r4lwfzq98gtdrz4arlf9lc4zpeu0h4xqckdcq9p4h5d
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBXSHhLQmJlbWcveFY0QTJL
+        eUM1T1VwOG9hM0Mxd3NrRGxPNjdXZmpCc2k0CjhJRlpTYytkcm5LbkJHZ3ZHZU9a
+        UU5ZR2V5YzdtSFhka1ExS2RSR2FXRWcKLS0tIERLSUdUKy80Nk5XditzRTdPTjlJ
+        QjhQSTExa2FXUU8xMXZUMG4wcGJHeDAKRu/HJL0ygxT31hwA5sazQj5qGgESI+KK
+        g6szgRv0/QaCKkG9EE9ijt1N5xmxmI1dFc80XwzPWW6PMz9K2XsJXA==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2025-12-05T06:17:20Z"
+  mac: ENC[AES256_GCM,data:xZS5NdfKSR1kT4YBJahdIbcM46C5jknxUE8uT/hpRVMfNoAYQrb2CeSiewpdESFG9xLDLQojVjUWAFZjMiooKo2SwCFoixA1QzB7TFWJSal8hTUTOlWSuYPGRHgN+dc5OxKwJIf/nyvMI5Yu+Pba1E84CUPfX5/p3uZO5evogp0=,iv:L3HaKrsGZQYYXFk999So81FiFvS/Q3ZdM99O97LsMhU=,tag:TDJ0msnIxlO92c407/mRZA==,type:str]
+  encrypted_regex: ^(private_key|token|secret|password)$
+  version: 3.11.0

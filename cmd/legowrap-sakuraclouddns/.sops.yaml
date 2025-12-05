@@ -1,0 +1,6 @@
+creation_rules:
+  - path_regex: '^legowrap-sakuraclouddns.*\.yaml$'
+    encrypted_regex: '^(private_key|token|secret|password)$'
+stores:
+  yaml:
+    indent: 2

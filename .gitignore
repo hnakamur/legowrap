@@ -1,4 +1,4 @@
 cmd/legowrap-sakuraclouddns/legowrap-sakuraclouddns
 *.log
-*.decrypted.yaml
+*decrypted.yaml
 !*-example.decrypted.yaml

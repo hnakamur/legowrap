@@ -31,8 +31,17 @@ age-keygen -o ~/.config/sops/age/keys.txt
 Copy the unencrypted example config file and modify it with your favorite editor.
 You can leave the `lego.account` key blank since you will update it in the section below.
 
+For Let's Encrypt, edit `token` and `secret` in `sakura_cloud_dns`.
+
 ```
 cp legowrap-sakuraclouddns-example.decrypted.yaml legowrap-sakuraclouddns.decrypted.yaml
+vim legowrap-sakuraclouddns.decrypted.yaml
+```
+
+For ZeroSSL, generate EAB Credentials at [ACME Documentation - ZeroSSL](https://zerossl.com/documentation/acme/) and edit `kid` and `hmac` values at `lego.register` in the file. Also edit `token` and `secret` in `sakura_cloud_dns`.
+
+```
+cp legowrap-sakuraclouddns-ZeroSSL-example.decrypted.yaml legowrap-sakuraclouddns.decrypted.yaml
 vim legowrap-sakuraclouddns.decrypted.yaml
 ```
 

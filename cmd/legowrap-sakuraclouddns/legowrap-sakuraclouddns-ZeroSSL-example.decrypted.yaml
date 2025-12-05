@@ -6,13 +6,14 @@ log:
     level: debug
 days_before_issue_cert: 30
 lego:
-    # ca_dir_url
-    # staging     https://acme-staging-v02.api.letsencrypt.org/directory
-    # production  https://acme-v02.api.letsencrypt.org/directory
-    ca_dir_url: https://acme-v02.api.letsencrypt.org/directory
+    ca_dir_url: https://acme.zerossl.com/v2/DV90
+    register:
+        eab: true
+        kid: _YOUR_KID_HERE_
+        hmac: _YOUR_HMAC_HERE_
     account:
         email: my-admin@example.jp
-        resource_json: '{"body":{"status":"valid"},"uri":"https://acme-v02.api.letsencrypt.org/acme/acct/_YOUR_ID_HERE_"}'
+        resource_json: '{"body":{"status":"valid","contact":["mailto:my-admin@example.jp"],"termsOfServiceAgreed":true,"orders":"https://acme.zerossl.com/v2/DV90/account/_YOUR_ID_/orders","externalAccountBinding":{"payload":"_YOUR_PAYLOAD_","protected":"_YOUR_PROTECTED_DATA_","signature":"_YOUR_SIGNATURE_"}},"uri":"https://acme.zerossl.com/v2/DV90/account/_YOUR_ID_"}'
         private_key: |
             -----BEGIN EC PRIVATE KEY-----
             _YOUR_KEY_HERE_

@@ -26,12 +26,19 @@ type Client struct {
 type Config struct {
 	CADirURL    string            `yaml:"ca_dir_url"`
 	UserAgent   string            `yaml:"user_agent"`
+	Register    RegisterConfig    `yaml:"register"`
 	Account     AccountConfig     `yaml:"account"`
 	Certificate CertificateConfig `yaml:"certificate"`
 	HTTPClient  HTTPClientConfig  `yaml:"http_client"`
 	DNS         DNSConfig         `yaml:"dns"`
 	ARI         ARIConfig         `yaml:"ari"`
 	Renew       RenewConfig       `yaml:"renew"`
+}
+
+type RegisterConfig struct {
+	EAB  bool   `yaml:"eab"`
+	KID  string `yaml:"kid"`
+	HMAC string `yaml:"hmac"`
 }
 
 type AccountConfig struct {
@@ -143,14 +150,29 @@ func NewClient(cfg *Config, acc registration.User, opts ...Option) (*Client, err
 	}
 	c.legoClient = legoClient
 
-	// if client.GetExternalAccountRequired() && !ctx.IsSet(flgEAB) {
-	// 	log.Fatalf("Server requires External Account Binding. Use --%s with --%s and --%s.", flgEAB, flgKID, flgHMAC)
-	// }
+	if legoClient.GetExternalAccountRequired() && !cfg.Register.EAB {
+		return nil, errors.New("server requires External Account Binding, " +
+			"set eab to true and also set kid and hmac in lego.register of the config file")
+	}
 
 	return c, nil
 }
 
 func (c *Client) RegisterAccount(opts registration.RegisterOptions) (*registration.Resource, error) {
+	if c.config.Register.EAB {
+		kid := c.config.Register.KID
+		hmacEncoded := c.config.Register.HMAC
+		if kid == "" || hmacEncoded == "" {
+			return nil, errors.New("kid and hmac must be set in lego.register in the config file")
+		}
+
+		return c.legoClient.Registration.RegisterWithExternalAccountBinding(registration.RegisterEABOptions{
+			TermsOfServiceAgreed: opts.TermsOfServiceAgreed,
+			Kid:                  kid,
+			HmacEncoded:          hmacEncoded,
+		})
+	}
+
 	return c.legoClient.Registration.Register(opts)
 }
 

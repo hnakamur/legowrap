@@ -174,7 +174,7 @@ func (c *EnsureUpdatedCmd) Run(ctx *CLIContext) error {
 		if len(curCerts) > 0 {
 			curCert := curCerts[0]
 
-			res, err = client.RenewCertificate(domain, domains, curCert, time.Now(), c.SkipRenew)
+			res, err = client.RenewCertificate(domain, domains, curCert, c.SkipRenew)
 			if err != nil {
 				if errors.Is(err, legowrap.ErrNoRenewal) {
 					return nil

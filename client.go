@@ -194,22 +194,21 @@ func (c *Client) IssueNewCertificate(domains []string) (*certificate.Resource, e
 }
 
 func (c *Client) RenewCertificate(domain string, domains []string,
-	curCert *x509.Certificate, now time.Time,
+	curCert *x509.Certificate,
 	skipRenew bool) (*certificate.Resource, error) {
 
 	var ariRenewalTime *time.Time
 	var replacesCertID string
 
 	if !c.config.ARI.Disable {
-		now = now.UTC()
+		now := time.Now().UTC()
 		var err error
 		ariRenewalTime, err = c.getARIRenewalTime(curCert, domain, now)
 		if err != nil {
 			return nil, err
 		}
-		c.logger.Info("after getARIRenewalTime", "ariRenewalTime", ariRenewalTime)
 		if ariRenewalTime != nil {
-			// Figure out if we need to sleep before renewing.
+			now = time.Now().UTC()
 			if ariRenewalTime.After(now) {
 				dur := ariRenewalTime.Sub(now)
 				c.logger.Info("Sleeping until renewal time", "domain",
@@ -228,7 +227,7 @@ func (c *Client) RenewCertificate(domain string, domains []string,
 	}
 
 	if ariRenewalTime == nil {
-		if err := c.needRenewal(curCert, domain, c.config.Renew.Days, c.config.Renew.Dynamic, now); err != nil {
+		if err := c.needRenewal(curCert, domain, c.config.Renew.Days, c.config.Renew.Dynamic); err != nil {
 			return nil, err
 		}
 	}
@@ -270,6 +269,9 @@ func (c *Client) getARIRenewalTime(cert *x509.Certificate, domain string,
 		c.logger.Warn("acme: calling renewal info endpoint", "domain", domain, "err", err)
 		return nil, nil
 	}
+	c.logger.Debug("acme: received renewalInfo",
+		"suggestedWindowStart", renewalInfo.SuggestedWindow.Start.UTC().Format(time.RFC3339),
+		"suggestedWindowEnd", renewalInfo.SuggestedWindow.End.UTC().Format(time.RFC3339))
 
 	renewalTime := renewalInfo.ShouldRenewAt(now, c.config.ARI.WaitToRenewDuration)
 	if renewalTime == nil {
@@ -300,22 +302,21 @@ func WasIssuedByAnotherAccountError(err error) bool {
 			"requester account did not request the certificate being replaced by this order"
 }
 
-func (c *Client) needRenewal(x509Cert *x509.Certificate, domain string, days int, dynamic bool, now time.Time) error {
+func (c *Client) needRenewal(x509Cert *x509.Certificate, domain string, days int, dynamic bool) error {
 	if x509Cert.IsCA {
 		c.logger.Error("Certificate bundle starts with a CA certificate", "domain", domain)
 		return ErrCetificateBundleStartsWithCA
 	}
 
 	if dynamic {
-		return c.needRenewalDynamic(x509Cert, domain, now)
+		return c.needRenewalDynamic(x509Cert, domain, time.Now())
 	}
 
-	notAfter := int(x509Cert.NotAfter.Sub(now).Hours() / 24.0)
+	notAfter := int(time.Until(x509Cert.NotAfter).Hours() / 24.0)
 
-	c.logger.Info("needRenewal nonDynamic",
+	c.logger.Debug("needRenewal nonDynamic",
 		"domain", domain, "definedRenewwalDays", days,
 		"certNotAfter", x509Cert.NotAfter.Format(time.RFC3339),
-		"now", now.Format(time.RFC3339),
 		"notAfterInDays", notAfter)
 
 	if days < 0 {
@@ -342,10 +343,9 @@ func (c *Client) needRenewalDynamic(x509Cert *x509.Certificate, domain string, n
 
 	dueDate := x509Cert.NotAfter.Add(-1 * time.Duration(lifetime.Nanoseconds()/divisor))
 
-	c.logger.Info("needRenewal dynamic",
+	c.logger.Debug("needRenewal dynamic",
 		"domain", domain,
 		"certNotAfter", x509Cert.NotAfter.Format(time.RFC3339),
-		"now", now.Format(time.RFC3339),
 		"dueDate", dueDate.Format(time.RFC3339))
 
 	if dueDate.Before(now) {

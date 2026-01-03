@@ -22,13 +22,110 @@ import (
 
 type AppConfig struct {
 	Log                     LogConfig            `yaml:"log"`
-	DaysBeforeIssueCert     int                  `yaml:"days_before_issue_cert"`
-	Lego                    legowrap.Config      `yaml:"lego"`
+	Lego                    LegoConfig           `yaml:"lego"`
 	SakuraCloudDNS          SakuraCloudDNSConfig `yaml:"sakura_cloud_dns"`
 	Certificate             string               `yaml:"certificate"`
 	CertificateKey          string               `yaml:"certificate_key"`
 	PostCommandShellAndOpts []string             `yaml:"post_command_shell_and_opts"`
 	PostCommand             string               `yaml:"post_command"`
+}
+
+type LegoConfig struct {
+	CADirURL    string            `yaml:"ca_dir_url"`
+	UserAgent   string            `yaml:"user_agent"`
+	Register    RegisterConfig    `yaml:"register"`
+	Account     AccountConfig     `yaml:"account"`
+	Certificate CertificateConfig `yaml:"certificate"`
+	HTTPClient  HTTPClientConfig  `yaml:"http_client"`
+	DNS         DNSConfig         `yaml:"dns"`
+	ARI         ARIConfig         `yaml:"ari"`
+}
+
+type RegisterConfig struct {
+	EAB  bool   `yaml:"eab"`
+	KID  string `yaml:"kid"`
+	HMAC string `yaml:"hmac"`
+}
+
+type AccountConfig struct {
+	Email        string `yaml:"email" json:"email"`
+	ResourceJSON string `yaml:"resource_json" json:"resource_json"`
+	PrivateKey   string `yaml:"private_key" json:"private_key"`
+}
+
+type CertificateConfig struct {
+	KeyType             string                         `yaml:"key_type"`
+	Timeout             time.Duration                  `yaml:"timeout"`
+	OverallRequestLimit int                            `yaml:"overall_request_limit"`
+	DisableCommonName   bool                           `yaml:"disable_common_name"`
+	ObtainRequest       CertificateObtainRequestConfig `yaml:"obtain_request"`
+}
+
+type CertificateObtainRequestConfig struct {
+	MustStaple                     bool   `yaml:"must_staple"`
+	PreferredChain                 string `yaml:"preferred_chain"`
+	Profile                        string `yaml:"profile"`
+	AlwaysDeactivateAuthorizations bool   `yaml:"always_deactivate_authorizations"`
+}
+
+type HTTPClientConfig struct {
+	Timeout       time.Duration `yaml:"timeout"`
+	TLSSkipVerify bool          `yaml:"tls_skip_verify"`
+}
+
+type DNSConfig struct {
+	Timeout   time.Duration `yaml:"timeout"`
+	Resolvers []string      `yaml:"resolvers"`
+}
+
+type ARIConfig struct {
+	Disable             bool          `yaml:"disable"`
+	WaitToRenewDuration time.Duration `yaml:"wait_to_renew_duration"`
+}
+
+func (c *LegoConfig) ToLegowrapConfig() *legowrap.Config {
+	return &legowrap.Config{
+		CADirURL:  c.CADirURL,
+		UserAgent: c.UserAgent,
+		Register: legowrap.RegisterConfig{
+			EAB:  c.Register.EAB,
+			KID:  c.Register.KID,
+			HMAC: c.Register.HMAC,
+		},
+		Account: legowrap.AccountConfig{
+			Email:        c.Account.Email,
+			ResourceJSON: c.Account.ResourceJSON,
+			PrivateKey:   c.Account.PrivateKey,
+		},
+		Certificate: legowrap.CertificateConfig{
+			KeyType:             c.Certificate.KeyType,
+			Timeout:             c.Certificate.Timeout,
+			OverallRequestLimit: c.Certificate.OverallRequestLimit,
+			DisableCommonName:   c.Certificate.DisableCommonName,
+			ObtainRequest: legowrap.CertificateObtainRequestConfig{
+				MustStaple:                     c.Certificate.ObtainRequest.MustStaple,
+				Bundle:                         true,
+				PreferredChain:                 c.Certificate.ObtainRequest.PreferredChain,
+				Profile:                        c.Certificate.ObtainRequest.Profile,
+				AlwaysDeactivateAuthorizations: c.Certificate.ObtainRequest.AlwaysDeactivateAuthorizations,
+			},
+		},
+		HTTPClient: legowrap.HTTPClientConfig{
+			Timeout:       c.HTTPClient.Timeout,
+			TLSSkipVerify: c.HTTPClient.TLSSkipVerify,
+		},
+		DNS: legowrap.DNSConfig{
+			Timeout:   c.DNS.Timeout,
+			Resolvers: c.DNS.Resolvers,
+		},
+		ARI: legowrap.ARIConfig{
+			Disable:             c.ARI.Disable,
+			WaitToRenewDuration: c.ARI.WaitToRenewDuration,
+		},
+		Renew: legowrap.RenewConfig{
+			Dynamic: true,
+		},
+	}
 }
 
 type CLIContext struct {
@@ -66,7 +163,8 @@ func (c *RegisterCmd) Run(ctx *CLIContext) error {
 		return err
 	}
 	account := &legowrap.Account{Email: c.Email, PrivateKey: accKey}
-	client, err := legowrap.NewClient(&cfg.Lego, account)
+	legowrapCfg := cfg.Lego.ToLegowrapConfig()
+	client, err := legowrap.NewClient(legowrapCfg, account)
 	if err != nil {
 		return err
 	}
@@ -150,7 +248,8 @@ func (c *EnsureUpdatedCmd) Run(ctx *CLIContext) error {
 		}
 		account.Registration = &resource
 	}
-	client, err := legowrap.NewClient(&cfg.Lego, account)
+	legowrapCfg := cfg.Lego.ToLegowrapConfig()
+	client, err := legowrap.NewClient(legowrapCfg, account)
 	if err != nil {
 		return err
 	}

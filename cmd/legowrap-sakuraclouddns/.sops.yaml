@@ -3,4 +3,4 @@ creation_rules:
     encrypted_regex: '^(private_key|token|secret|password|kid|hmac)$'
 stores:
   yaml:
-    indent: 2
+    indent: 4

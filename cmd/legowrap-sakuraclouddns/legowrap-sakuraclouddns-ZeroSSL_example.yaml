@@ -1,62 +1,55 @@
 # legowrap-sakuraclouddns.yaml
 log:
-  # filename_pattern: 2006=yyyy, 01=mm, 02=dd, 15=HH, 04=MM, 05=SS
-  #filename_pattern: /var/log/legowrap-sakuraclouddns/legowrap-sakuraclouddns-20060102-150405.log
-  filename_pattern: stderr
-  level: debug
-days_before_issue_cert: 30
+    # filename_pattern: 2006=yyyy, 01=mm, 02=dd, 15=HH, 04=MM, 05=SS
+    #filename_pattern: /var/log/legowrap-sakuraclouddns/legowrap-sakuraclouddns-20060102-150405.log
+    filename_pattern: stderr
+    level: debug
 lego:
-  ca_dir_url: https://acme.zerossl.com/v2/DV90
-  register:
-    eab: true
-    kid: ENC[AES256_GCM,data:6d0JzGeW2HdorjP18y7b,iv:PX1KD+/tLzKcY5VXlZmtuwGXgLiKGON62LG98meG5EU=,tag:EH0+YC6IxsQTWsLYog43CA==,type:str]
-    hmac: ENC[AES256_GCM,data:UYLMOxpxmoPFCoLn3nHlAg==,iv:7iVMwCyUKBwUkWhI7qON01QU6VeYY9MMvJ1VO/xScLE=,tag:SpfG4+7Xa+ZuPNrkTP7dlg==,type:str]
-  account:
-    email: my-admin@example.jp
-    resource_json: '{"body":{"status":"valid","contact":["mailto:my-admin@example.jp"],"termsOfServiceAgreed":true,"orders":"https://acme.zerossl.com/v2/DV90/account/_YOUR_ID_/orders","externalAccountBinding":{"payload":"_YOUR_PAYLOAD_","protected":"_YOUR_PROTECTED_DATA_","signature":"_YOUR_SIGNATURE_"}},"uri":"https://acme.zerossl.com/v2/DV90/account/_YOUR_ID_"}'
-    private_key: ENC[AES256_GCM,data:bOebjSEB/wiZs1BVMO0+aEE0bWF+LHtlFFt88Xf8K1vyDkyDQSj2gG/5VjqVG80UVeqA1CycSe/h3vBFBEfT0DEsxf0ocybsN90eDw==,iv:lHVDZDTuWENStHm6cXoJuT/PnNEl5V8+RH2ANka1d2w=,tag:WrKvSXHzTB44dZ2FkDzGhg==,type:str]
-  certificate:
-    key_type: ec256
-    timeout: 60s
-    overall_request_limit: 0
-    disable_common_name: false
-    obtain_request:
-      bundle: true
-  http_client:
-    timeout: 0s
-    tls_skip_verify: false
-  dns:
-    timeout: 10s
-    resolvers: []
-    disable_cp: false
-    propagation_disable_ans: false
-    propagation_rns: false
-    propagation_wait: 0s
-  renew:
-    days: 30
-    dynamic: false
+    ca_dir_url: https://acme.zerossl.com/v2/DV90
+    register:
+        eab: true
+        kid: ENC[AES256_GCM,data:/FaGFm8BY43at+RLqY6N,iv:8RsRWRYrFDprDOMGPJzux0UilHA+392xj+rbFuvqCAM=,tag:CBZXKHWMTnRDBXUORlDR/g==,type:str]
+        hmac: ENC[AES256_GCM,data:T3l/cHnuePoZTCc3KOmzyw==,iv:Xyh5hEYXmYIU48CT9apGmu+184rYHiUV94s2ewFn2XM=,tag:gWbPCDcn9GEGhRRcmZ8khA==,type:str]
+    account:
+        email: my-admin@example.jp
+        resource_json: '{"body":{"status":"valid","contact":["mailto:my-admin@example.jp"],"termsOfServiceAgreed":true,"orders":"https://acme.zerossl.com/v2/DV90/account/_YOUR_ID_/orders","externalAccountBinding":{"payload":"_YOUR_PAYLOAD_","protected":"_YOUR_PROTECTED_DATA_","signature":"_YOUR_SIGNATURE_"}},"uri":"https://acme.zerossl.com/v2/DV90/account/_YOUR_ID_"}'
+        private_key: ENC[AES256_GCM,data:L6E6fAnrDn/C0MLCWobZwdrRWfnjTYXXs4aGgWumYv4wls5Xi87N/jtR5WuLiUfZWLxnfynufC53IXRlMMasQLAMoBaDQam0fVg8zw==,iv:GhtJBvhbpArFFFyS9ZVrpjoZKma2qLmO1njKXW/hPqg=,tag:JnK0k32h4PdWhYYULDgtPQ==,type:str]
+    certificate:
+        key_type: ec256
+        timeout: 60s
+        obtain_request:
+            preferred_chain: ""
+            profile: ""
+    http_client:
+        timeout: 0s
+        tls_skip_verify: false
+    dns:
+        timeout: 10s
+    ari:
+        disable: false
+        wait_to_renew_duration: 5m
 sakura_cloud_dns:
-  token: ENC[AES256_GCM,data:3suYXEH4FGT/datFOWBJEgo=,iv:c1jDAJK8XlvLG+riPB9CzXav8G6V3oWOUQDor6LjtP0=,tag:m9gt1nzKxDQ5U/yQPbH8kA==,type:str]
-  secret: ENC[AES256_GCM,data:Qw05WaG6ZL6SyKH3246oNkLW,iv:DzrIQ7XnFaVHoc+rwwx+p7ZDOpHUy1R2EfJbEPeDXiM=,tag:QAbExq32uHFXuGnjQ/j+1Q==,type:str]
-  ttl: 10
-  propagation_timeout: 2m
-  polling_interval: 2s
-  http_client_timeout: 10s
+    token: ENC[AES256_GCM,data:Q+Fyxt3OfLEdwnpkHL9vExI=,iv:4AYEQQkrwL5bycxe4MVMpJ32Yzm6Ri3gFT4wXE+nTP8=,tag:R/X40RJWW8MEL6Zf2CTI3Q==,type:str]
+    secret: ENC[AES256_GCM,data:SUOB+OaKxHihceaet4eXFQGk,iv:PSURzFbz7tLJg70jVYCIV6bPMYEeLc7/88Anfg3eb7g=,tag:0mgNA6EGNLOMBrWFL0Dcng==,type:str]
+    ttl: 10
+    propagation_timeout: 2m
+    polling_interval: 2s
+    http_client_timeout: 10s
 certificate: /etc/ssl/certs/example.jp.crt
 certificate_key: /etc/ssl/private/example.jp.key
 post_command: systemctl reload nginx
 sops:
-  age:
-    - recipient: age1xwzkkvxll278p92rxawljdmm6rk0maufrsz668a26x30rnuwn53q2jr4m6
-      enc: |
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB1YmhqZWd6R0lYTkNlSWFS
-        RkxlRGs0R3ZHRSs5SlFHYTNKWWN4Lys3b1NnCk4vUHZVVWtCUW5ISERUZ2EyalUv
-        QUlRTW5mMCt2Y1BWcTdoVTRvdmpNOXcKLS0tIDR1cWh5OThBNFYrVHZ1aTErcHRy
-        Q1VyOVpJa0gzUUowckxpLzJRbm5FUTQKsRoQaVqhH997T4qniKfAXryWMu1c1hzf
-        RejKmq/oh7KKKtXpbgTbpF93kybD1NZWWVKcQwteAKN73wy/QEOVKQ==
-        -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-12-05T09:17:17Z"
-  mac: ENC[AES256_GCM,data:R0csDtMRjEEReZCXT6eHKKPQYEbIIgCWGCpXHS6xfZ/BgGn4LRPxGNWPE+BClwGBAV3MQydaLGn7KotP+++NSbYucJxGrIkXMRg+sYbVw31iUFFHJbZrt+cFA+Tkh5IYvwyI42HDwnRz77YvCyqqmr0gG36fzRzw6+c4ryxvKlE=,iv:F68uSg+9T8DZU4sCaOASGOUO8qxJyL72Gukg1+zxpyA=,tag:W2DMJ8SVkk6lHge1tO3yfw==,type:str]
-  encrypted_regex: ^(private_key|token|secret|password|kid|hmac)$
-  version: 3.11.0
+    age:
+        - recipient: age1vhw6fwfr058c364r4lwfzq98gtdrz4arlf9lc4zpeu0h4xqckdcq9p4h5d
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNcHg1Q0plMWFxcktxd2xm
+            RHhnUFJSSXdhZ2QxTU54ZFpGNER1S3F0NzJZCk5SdEVJZHF5QmRuYVNoUVg0NklF
+            OUM4TGFYVzcvK1lIUEpsSHNYN2RpS2cKLS0tIFhuQll5SzVNSUNVQWJ3S1pVcHZr
+            VG05ZEg1M2o0ZmJTZDgvaWU5U2cza3cK3SJEBLtF71v2IrM8K4Jw0Gis1YMtWv18
+            j6v+gXfJxv/loZBhysa3zBUM7Db/OLoWniIREfUk8xOt//6zfVm7zg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-01-03T23:47:59Z"
+    mac: ENC[AES256_GCM,data:q/WQ0f8cDxR7TmeefFpiec0taZZJRpb9uQuxYfgERgXEtb+HWAIDJ/I1gj3zlstSbT466NlsJUU5FFNillYwrxkgMTSSaQzGqxBQEA61vy/Q0pRYMljpybwLYULW8xgksQxo0KAZwd/zsUeZZdC5muSJXlTUOItSAlvZOGPuhko=,iv:KODQDgHFyTwr5E3XocTxs+bSGT+QHkGE7oO0SnsJAX0=,tag:O7ysIcYuITEDu3CgWbi96g==,type:str]
+    encrypted_regex: ^(private_key|token|secret|password|kid|hmac)$
+    version: 3.11.0

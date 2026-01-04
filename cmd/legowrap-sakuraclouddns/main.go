@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -28,6 +29,7 @@ type AppConfig struct {
 	CertificateKey          string               `yaml:"certificate_key"`
 	PostCommandShellAndOpts []string             `yaml:"post_command_shell_and_opts"`
 	PostCommand             string               `yaml:"post_command"`
+	GHESManage              GHESManageConfig     `yaml:"ghes_manage"`
 }
 
 type LegoConfig struct {
@@ -316,6 +318,13 @@ func (c *EnsureUpdatedCmd) Run(ctx *CLIContext) error {
 	if cfg.PostCommand != "" {
 		if err := runPostCommand(cfg.PostCommandShellAndOpts, cfg.PostCommand); err != nil {
 			return fmt.Errorf("run post command: %s", err)
+		}
+	}
+
+	if ghesCfg := &cfg.GHESManage; ghesCfg.HTTPAuth.User != "" && ghesCfg.HTTPAuth.Password != "" {
+		if err := updateAndWaitGHESCertificateAndKey(context.Background(), domain, ghesCfg,
+			string(res.Certificate), string(res.PrivateKey)); err != nil {
+			return err
 		}
 	}
 

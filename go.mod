@@ -1,13 +1,14 @@
 module github.com/hnakamur/legowrap
 
-go 1.24.6
+go 1.25.0
 
 require (
 	github.com/alecthomas/kong v1.13.0
 	github.com/getsops/sops/v3 v3.11.0
 	github.com/go-acme/lego/v4 v4.29.0
 	github.com/hashicorp/go-retryablehttp v0.7.8
-	github.com/hnakamur/sakuraclouddns v0.0.0-00010101000000-000000000000
+	github.com/hnakamur/ghesmanage v0.1.0
+	github.com/hnakamur/sakuraclouddns v0.1.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.3
 )
 
@@ -132,5 +133,3 @@ require (
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
-
-replace github.com/hnakamur/sakuraclouddns => ../sakuraclouddns

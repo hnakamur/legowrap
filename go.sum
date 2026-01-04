@@ -216,6 +216,10 @@ github.com/hashicorp/vault/api v1.21.0 h1:Xej4LJETV/spWRdjreb2vzQhEZt4+B5yxHAObf
 github.com/hashicorp/vault/api v1.21.0/go.mod h1:IUZA2cDvr4Ok3+NtK2Oq/r+lJeXkeCrHRmqdyWfpmGM=
 github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUqJM=
 github.com/hexops/gotextdiff v1.0.3/go.mod h1:pSWU5MAI3yDq+fZBTazCSJysOMbxWL1BSow5/V2vxeg=
+github.com/hnakamur/ghesmanage v0.1.0 h1:DUp61z23NxK49tUzxa/jaDrUSSyfiqWuAA4VAEwWXT4=
+github.com/hnakamur/ghesmanage v0.1.0/go.mod h1:fdBbRUP6nyHbBxmbVLRixql6PNPoZpFWDkigK2LYDM0=
+github.com/hnakamur/sakuraclouddns v0.1.0 h1:IOI7JEK+5/aD5PT4z6h6nl6441pOy4zALGiJgE6kY8U=
+github.com/hnakamur/sakuraclouddns v0.1.0/go.mod h1:122k2mcRN1v6sqygPLxPTXrsB+L8lFNogql48m3HFxM=
 github.com/keybase/go-keychain v0.0.1 h1:way+bWYa6lDppZoZcgMbYsvC7GxljxrskdNInRtuthU=
 github.com/keybase/go-keychain v0.0.1/go.mod h1:PdEILRW3i9D8JcdM+FmY6RwkHGnhHxXwkPPMeUgOK1k=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=

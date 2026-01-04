@@ -13,9 +13,10 @@ import (
 )
 
 type GHESManageConfig struct {
-	ApplyWaitInterval time.Duration              `yaml:"apply_wait_interval"`
-	HTTPClient        GHESManageHTTPClientConfig `yaml:"http_client"`
-	HTTPAuth          GHESManageHTTPAuthConfig   `yaml:"http_auth"`
+	ApplyWaitInitialDelay time.Duration              `yaml:"apply_wait_initial_delay"`
+	ApplyWaitInterval     time.Duration              `yaml:"apply_wait_interval"`
+	HTTPClient            GHESManageHTTPClientConfig `yaml:"http_client"`
+	HTTPAuth              GHESManageHTTPAuthConfig   `yaml:"http_auth"`
 }
 
 type GHESManageHTTPClientConfig struct {
@@ -60,12 +61,21 @@ func updateAndWaitGHESCertificateAndKey(ctx context.Context, domain string, cfg 
 	}
 
 	startTime := time.Now()
-	runID := "cert_update_" + startTime.Format("20060102150405")
-	slog.Info("applying the change of certificate and key...", "run_id", runID)
-	if _, err := apiClient.TriggerConfigApply(ctx, runID); err != nil {
+	runID, err := apiClient.TriggerConfigApply(ctx)
+	if err != nil {
 		return err
 	}
+	slog.Info("triggered GHES config apply", "run_id", runID)
 
+	slog.Debug("polling GHES config change to be applied...",
+		"initial_delay", cfg.ApplyWaitInitialDelay.String(),
+		"interval", cfg.ApplyWaitInterval.String())
+
+	select {
+	case <-ctx.Done():
+		return nil
+	case <-time.After(cfg.ApplyWaitInitialDelay):
+	}
 	for {
 		status, err := apiClient.GetConfigApplyStatus(ctx, runID)
 		if err != nil {
@@ -73,15 +83,14 @@ func updateAndWaitGHESCertificateAndKey(ctx context.Context, domain string, cfg 
 		}
 		if !status.Running {
 			if !status.Successful {
-				return errors.New("failed to apply change of certificate and key")
+				return errors.New("failed to apply GHES config change")
 			}
-			slog.Info("finished setting certificate and key", "elapsed", time.Since(startTime).String())
+			slog.Info("finished to apply GHES config change", "elapsed", time.Since(startTime).String())
 			return nil
 		}
 
-		slog.Info("waiting for the change to be applied",
-			"status", status,
-			"apply_wait_interval", cfg.ApplyWaitInterval.String())
+		slog.Info("waiting for GHES config change to be applied",
+			"status", status)
 
 		select {
 		case <-ctx.Done():

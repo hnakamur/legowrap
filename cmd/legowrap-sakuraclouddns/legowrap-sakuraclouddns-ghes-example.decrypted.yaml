@@ -38,6 +38,7 @@ sakura_cloud_dns:
     polling_interval: 2s
     http_client_timeout: 10s
 ghes_manage:
+    apply_wait_initial_delay: 10s
     apply_wait_interval: 30s
     http_client:
         timeout: 30s

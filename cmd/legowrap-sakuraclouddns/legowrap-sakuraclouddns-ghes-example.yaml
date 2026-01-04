@@ -12,7 +12,7 @@ lego:
     account:
         email: my-admin@example.jp
         resource_json: '{"body":{"status":"valid"},"uri":"https://acme-v02.api.letsencrypt.org/acme/acct/_YOUR_ID_HERE_"}'
-        private_key: ENC[AES256_GCM,data:hvl/dUebKsVvg8pyD0g9fEXs25MBKFzFTvSb4yLWeQ5H6t1seMEVvX0vTZOTWUyAb3oP2yZVyV8JKGJDZM0kz0jEHshVOubxfIb9rg==,iv:rhfNLS08MOrQxtkrWCybiaAmpKGdHPdE51mVvoDTubg=,tag:3oATDJAu7OHpiV0zXfQDGA==,type:str]
+        private_key: ENC[AES256_GCM,data:BLhiSpZTsTIMXRsTaycyig7vP1bjK8rSiIk7vAfTQ5Nc2JjnK6sHvroMcU9KyifKxspiIF2y044ajf6m4AoCnzjtTSZ2dEWMOE9F9g==,iv:4Zybq0GMngzPRP2wZejvFMaxKt1k1gfDYZH33ZnkNOw=,tag:9JFrN+GjI1mK+myppgRuqQ==,type:str]
     certificate:
         key_type: rsa2048
         timeout: 60s
@@ -28,32 +28,33 @@ lego:
         disable: false
         wait_to_renew_duration: 5m
 sakura_cloud_dns:
-    token: ENC[AES256_GCM,data:K42DFi1f6ePQXQt5iTB3c7I=,iv:jsI66F2XJlo21yXb/0qKSvhMkKDrn6emEtdMGGE+RcI=,tag:MfQYf+aHZawxJnEyrKXgyw==,type:str]
-    secret: ENC[AES256_GCM,data:H0ffs64I/uGDoWp1qO73z9TC,iv:vTDYr0yDYBrfrPBZAd5mrdALTQVxNpa0dyZYYXTigQs=,tag:aXZDIwD4OG9KYsILfNP/0A==,type:str]
+    token: ENC[AES256_GCM,data:pasMiFkupiGePBl6b/7vKsc=,iv:P4XbsxUZExVkZSwYMYCMqktvkzNWs6Ne8cFVYoUQbAo=,tag:VGAii2U83mQSvwtRxXtpng==,type:str]
+    secret: ENC[AES256_GCM,data:wUI0GKYcx5VQsquJi/jOCNUQ,iv:ifCCCkLK8sjVybDqeXoVS+EmiA9zTTDb/VAlXM9KFYk=,tag:Y3n4qu17Y1b5u+lNwLy2QA==,type:str]
     ttl: 10
     propagation_timeout: 2m
     polling_interval: 2s
     http_client_timeout: 10s
 ghes_manage:
+    apply_wait_initial_delay: 10s
     apply_wait_interval: 30s
     http_client:
         timeout: 30s
         tls_skip_verify: true
     http_auth:
         user: api_key
-        password: ENC[AES256_GCM,data:yzLZv1S9rhlLKZtSjDUXcOf1SLo=,iv:JYVpmFPxFbJLws7WHBQQyIB3xCT81PFkq3waXTbyG/8=,tag:4JU0bekmde/4i5fBtUBM+g==,type:str]
+        password: ENC[AES256_GCM,data:PuSMZyTTEJ6loakSD8MRxXC5iPg=,iv:3dJU8aaEhfvIUhmo+UV//ARNwp+iTFiuF/jMxiyIHL8=,tag:vqN32dEygUBhg2rDJafxnw==,type:str]
 sops:
     age:
         - recipient: age1vhw6fwfr058c364r4lwfzq98gtdrz4arlf9lc4zpeu0h4xqckdcq9p4h5d
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYWkZ4RnF0TEFMUXN0Z0Z2
-            SWREcllTZjRKYkpLWXdtczd5aDZZcTNJTndFCmYwZjMybCtXT29rRVNMVkRnS3A1
-            ckRZOTNBS2d2YnZPZWRBYUtkYjZBS1UKLS0tIHBOTVQ2OGJWMnlYSjhwUlJjcTl4
-            bjJyMDlSVHRzd2ZKblBsNmJyb2QzRlUKPll9FuvgT3jPN6tzmpHRf87RfRSSlgI2
-            TAyrVAMeAvpf61zgnUdU9vPz5G8Y3FMv6wk8fqMwsb/3kxqYcr1V1g==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB3VFptdUVQWGFwbXphdlRi
+            cEQyeHBydXNnWXN0OWRIdndSS3k1aXA0Y2tjCitLVU91ZzFUdUR1c0RZVTFxaldI
+            dTVhL2NXM2NTc2g2QWY5TzRIZDdKWmsKLS0tIDlFQjA4OGlYbWlid3ZqbnpHU2ZV
+            eDlTMmM1TEFUZUNSTHRLZWZWWHFkaDQKDN9nilb+ApgyvpHsF2WDNOf1SqoT4o/D
+            o1HNM944mmVzVqpnucggHHm3KLkzi+kyinSgJD3LwtpUMA93FO8H8Q==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-04T00:50:18Z"
-    mac: ENC[AES256_GCM,data:Bs4mk/1bQ5+EEoDxwL7GGsP2HrFkgkIG27Ly0k4x3EQsv/cschAgd/Id2iJCr5Caf5OXftJh0gEluchC7osZ7PUhr0RPYjvqXoZMvIgFDnZBZNSm14xlk84+iQsr0tcZgFCmRPCCczEvrliyNQVpr3t/r6k+w3Y+91aQUjnxTLE=,iv:oS/XNIO9vVObSiJpcgx/DNnEaU+jOS+hXfluEXHAxPQ=,tag:K9FWCvk8/hplelMcpgz7Cw==,type:str]
+    lastmodified: "2026-01-04T04:18:38Z"
+    mac: ENC[AES256_GCM,data:JG93oaNOlB2qEZnM+S7Bz2C0lEqujlZVJYh1HiuGUoYm87UAVXpWnWKiZ5e1kycztLifOnfp0vbWVdc/7XoQrrzNR95700hG5vKG/xM3q9Kz/md4cNTaCTKeQspNLJic4eHbNbk9/l0p99FgmZsZ0Yt+fAcJtXxJ3FIDlLsA864=,iv:bWMuaNqvq+Q8AB8M4WiHdeJVEngLgjictNHD+eCliuA=,tag:9JnmncTuRDEF2buT4WXJbw==,type:str]
     encrypted_regex: ^(private_key|token|secret|password|kid|hmac)$
     version: 3.11.0

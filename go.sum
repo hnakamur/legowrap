@@ -218,6 +218,8 @@ github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUq
 github.com/hexops/gotextdiff v1.0.3/go.mod h1:pSWU5MAI3yDq+fZBTazCSJysOMbxWL1BSow5/V2vxeg=
 github.com/hnakamur/ghesmanage v0.1.0 h1:DUp61z23NxK49tUzxa/jaDrUSSyfiqWuAA4VAEwWXT4=
 github.com/hnakamur/ghesmanage v0.1.0/go.mod h1:fdBbRUP6nyHbBxmbVLRixql6PNPoZpFWDkigK2LYDM0=
+github.com/hnakamur/ghesmanage v0.2.0 h1:iz9Yd7Rq8XtDAT3Br5ai9/0h7VH5ITjreKdRqVzvfpI=
+github.com/hnakamur/ghesmanage v0.2.0/go.mod h1:fdBbRUP6nyHbBxmbVLRixql6PNPoZpFWDkigK2LYDM0=
 github.com/hnakamur/sakuraclouddns v0.1.0 h1:IOI7JEK+5/aD5PT4z6h6nl6441pOy4zALGiJgE6kY8U=
 github.com/hnakamur/sakuraclouddns v0.1.0/go.mod h1:122k2mcRN1v6sqygPLxPTXrsB+L8lFNogql48m3HFxM=
 github.com/keybase/go-keychain v0.0.1 h1:way+bWYa6lDppZoZcgMbYsvC7GxljxrskdNInRtuthU=

@@ -7,7 +7,7 @@ require (
 	github.com/getsops/sops/v3 v3.11.0
 	github.com/go-acme/lego/v4 v4.29.0
 	github.com/hashicorp/go-retryablehttp v0.7.8
-	github.com/hnakamur/ghesmanage v0.1.0
+	github.com/hnakamur/ghesmanage v0.2.0
 	github.com/hnakamur/sakuraclouddns v0.1.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.3
 )

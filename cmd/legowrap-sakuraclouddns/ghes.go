@@ -59,10 +59,10 @@ func updateAndWaitGHESCertificateAndKey(ctx context.Context, domain string, cfg 
 		return err
 	}
 
-	slog.Info("applying the change of certificate and key...")
 	startTime := time.Now()
-	runID, err := apiClient.TriggerConfigApply(ctx)
-	if err != nil {
+	runID := "cert_update_" + startTime.Format("20060102150405")
+	slog.Info("applying the change of certificate and key...", "run_id", runID)
+	if _, err := apiClient.TriggerConfigApply(ctx, runID); err != nil {
 		return err
 	}
 

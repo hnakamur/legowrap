@@ -232,6 +232,8 @@ func (c *EnsureUpdatedCmd) Run(ctx *CLIContext) error {
 	domains := c.Domain
 	slog.Info("ensure-updated start",
 		"domains", domains,
+		"profile", cfg.Lego.Certificate.ObtainRequest.Profile,
+		"preferredChain", cfg.Lego.Certificate.ObtainRequest.PreferredChain,
 		"skipGetCert", c.SkipGetCert,
 		"skipRenew", c.SkipRenew,
 		"skipNew", c.SkipNew,
